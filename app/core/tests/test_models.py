@@ -52,3 +52,14 @@ class ModelTests(TestCase):
         )
 
         self.assertEqual(str(tag), tag.name)
+
+    def test_movie_str(self):
+        """Test the movie string representation"""
+        movie = models.Movie.objects.create(
+            user=sample_user(),
+            title='Fight Club',
+            time_minutes=160,
+            ticket_price_USD=5.00
+        )
+
+        self.assertEqual(str(movie), movie.title)
