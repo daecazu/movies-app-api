@@ -27,3 +27,7 @@ class MovieSerializer(serializers.ModelSerializer):
             'link',
         )
         read_only_fields = ('id',)
+
+
+class MovieDetailSerializer(MovieSerializer):
+    tags = TagSerializer(many=True, read_only=True)
