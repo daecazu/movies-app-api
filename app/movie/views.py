@@ -2,7 +2,7 @@ from rest_framework import viewsets, mixins
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-from core.models import Tag
+from core.models import Tag, Movie
 
 from movie import serializers
 
@@ -23,3 +23,15 @@ class TagViewSet(viewsets.GenericViewSet,
     def perform_create(self, serializer):
         """Create a new tag"""
         serializer.save(user=self.request.user)
+
+
+class MovieViewSet(viewsets.ModelViewSet):
+    """Manage movies in the database"""
+    serializer_class = serializers.MovieSerializer
+    queryset = Movie.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        """Retrieve the movies for the authenticated user"""
+        return self.queryset.filter(user=self.request.user)

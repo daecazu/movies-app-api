@@ -6,6 +6,7 @@ from movie import views
 
 router = DefaultRouter()
 router.register('tags', views.TagViewSet)
+router.register('movies', views.MovieViewSet)
 
 app_name = 'movie'
 
