@@ -131,3 +131,38 @@ class PrivateMovieApiTests(TestCase):
         self.assertEqual(tags.count(), 2)
         self.assertIn(tag1, tags)
         self.assertIn(tag2, tags)
+
+    def test_partial_update_movie(self):
+        """Test updating a movie with patch"""
+        movie = sample_movie(user=self.user)
+        movie.tags.add(sample_tag(user=self.user))
+        new_tag = sample_tag(user=self.user, name='Hentai')
+
+        payload = {'title': 'Test movie partial check', 'tags': [new_tag.id]}
+        url = detail_url(movie.id)
+        self.client.patch(url, payload)
+
+        movie.refresh_from_db()
+        self.assertEqual(movie.title, payload['title'])
+        tags = movie.tags.all()
+        self.assertEqual(len(tags), 1)
+        self.assertIn(new_tag, tags)
+
+    def test_full_update_movie(self):
+        """Test updating a movie with PUT"""
+        movie = sample_movie(user=self.user)
+        movie.tags.add(sample_tag(user=self.user))
+        payload = {
+            'title': 'La Estrategia del Caracol',
+            'time_minutes': 180,
+            'ticket_price_USD': 8.00
+        }
+        url = detail_url(movie.id)
+        self.client.put(url, payload)
+
+        movie.refresh_from_db()
+        self.assertEqual(movie.title, payload['title'])
+        self.assertEqual(movie.time_minutes, payload['time_minutes'])
+        self.assertEqual(movie.ticket_price_USD, payload['ticket_price_USD'])
+        tags = movie.tags.all()
+        self.assertEqual(len(tags), 0)
