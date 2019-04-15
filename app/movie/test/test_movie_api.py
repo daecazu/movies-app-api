@@ -12,13 +12,16 @@ from movie.serializers import MovieSerializer, MovieDetailSerializer
 
 MOVIES_URL = reverse('movie:movie-list')
 
+
 def detail_url(movie_id):
     """Return movie detail URL"""
     return reverse('movie:movie-detail', args=[movie_id])
 
+
 def sample_tag(user, name='sample tag'):
     """Create and return a sample tag"""
     return Tag.objects.create(user=user, name=name)
+
 
 def sample_movie(user, **params):
     """Create and return a sample movie"""
@@ -89,7 +92,6 @@ class PrivateMovieApiTests(TestCase):
         """Test viewing a movie detail"""
         movie = sample_movie(user=self.user)
         movie.tags.add(sample_tag(user=self.user))
-        
 
         url = detail_url(movie.id)
         res = self.client.get(url)
@@ -129,4 +131,3 @@ class PrivateMovieApiTests(TestCase):
         self.assertEqual(tags.count(), 2)
         self.assertIn(tag1, tags)
         self.assertIn(tag2, tags)
-
