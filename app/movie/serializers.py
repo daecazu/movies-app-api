@@ -31,3 +31,11 @@ class MovieSerializer(serializers.ModelSerializer):
 
 class MovieDetailSerializer(MovieSerializer):
     tags = TagSerializer(many=True, read_only=True)
+
+
+class MovieImageSerializer(serializers.ModelSerializer):
+    """ Serializer for uploading images to movie"""
+    class Meta:
+        model = Movie
+        fields = ('id', 'image')
+        read_only_fields = ('id',)
